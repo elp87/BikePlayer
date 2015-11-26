@@ -4,7 +4,7 @@ using System.Text;
 
 namespace elp87.VeloAudio
 {
-    public class Mp3File
+    public class Mp3File : IAudioFile
     {
         [DllImport("winmm.dll")]
         private static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hwndCallback);
@@ -33,5 +33,26 @@ namespace elp87.VeloAudio
         {
             mciSendString("pause MediaFile", null, 0, IntPtr.Zero);
         }
+
+        public string Artist
+        {
+            get { return ""; }
+        }
+
+        public string Album
+        {
+            get { return ""; }
+        }
+
+        public string Year
+        {
+            get { return ""; }
+        }
+
+        public string Title
+        {
+            get { return ""; }
+        }
+        
     }
 }
