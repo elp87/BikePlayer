@@ -1,0 +1,2435 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>elp87.TagReader</name>
+    </assembly>
+    <members>
+        <member name="T:elp87.TagReader.ByteOperation">
+            <summary>
+            Provides static methods for operations with bytes.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.ByteOperation.GetBit(System.Byte,System.Int32)">
+            <summary>
+            Returns value of bit within byte.
+            </summary>
+            <param name="initByte">Byte</param>
+            <param name="bitPosition">The zero-based index position of bit within byte. Position 0 is the least significant bit, position 7 is the most significant bit</param>
+            <returns>Boolean value of bit</returns>
+            <example>
+            <code lang="C#">
+            using elp87.TagReader;
+            using System;
+            namespace Example
+            {
+                class Program
+                {
+                    static void Main(string[] args)
+                    {
+                        byte init = 35; // 0010 0011
+                        for (int i = 0; i &lt;= 8; i++)
+                        {
+                            bool result = ByteOperation.GetBit(init, i);
+                            Console.WriteLine(result);
+                        }
+                    }
+                }
+            }
+            // The example displays the following output:
+            // True
+            // True
+            // False
+            // False
+            // False
+            // True
+            // False
+            // False
+            </code>
+            </example>
+            <remarks>
+            If bit position is out of byte, method returns "false".
+            <code lang="C#">
+            bool result = ByteOperation.GetBit(init, 9);
+            </code>
+            </remarks>
+        </member>
+        <member name="T:elp87.TagReader.ByteArray">
+            <summary>
+            Provides static methods for byte arrays
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.ByteArray.Terminator">
+            <summary>
+            String terminator for one-byte char encodings
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.ByteArray.TerminatorArray">
+            <summary>
+            String terminator for double-byte char encodings
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.ByteArray.FindSubArray(System.Byte[],System.Byte[])">
+             <summary>
+             Returns the zero-based index of the first occurrence of a byte-array mask within a byte-array. The method returns -1 if mask is not found in byte-array.
+             </summary>
+             <param name="byteArray">The byte array where the search is conducted.</param>
+             <param name="mask">The byte array which is searched in the array.</param>
+             <returns>The zero-based index position of first byte of mask in the byte-array.</returns>
+             <remarks>
+             <para>Index numbering starts from zero.</para>
+             </remarks>
+             <example>
+             <code lang="C#">
+             using elp87.TagReader;
+             using System;
+            
+             namespace Example
+             {
+                 class Program
+                 {
+                     static void Main(string[] args)
+                     {            
+                         byte[] array = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C };
+                         byte[] mask = new byte[] { 0x03, 0x04, 0x05 };
+             
+                         int index = ByteArray.FindSubArray(array, mask);
+             
+                         Console.WriteLine(index);
+                     }
+                 }
+             }
+             // The example displays the following output: 
+             //       3
+             </code>
+             </example>
+        </member>
+        <member name="M:elp87.TagReader.ByteArray.Reverse(System.Byte[])">
+             <summary>
+             Returns reverse copy of byte-array.
+             </summary>
+             <param name="byteArray">Original array.</param>
+             <returns>Reverse copy of byte-array</returns>
+             <remarks>
+             This method returns new instance of <see cref="T:System.Byte"/> array, it does not reverse original instance as <see cref="M:System.Array.Reverse(System.Array)"/>
+             </remarks>
+             <example>
+             <code lang="C#">
+             using elp87.TagReader;
+             using System;
+            
+             namespace Example
+             {
+                 class Program
+                 {
+                     static void Main(string[] args)
+                     {
+                         byte[] array = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                         byte[] reverse = ByteArray.Reverse(array);
+            
+                         foreach (byte b in reverse)
+                         {
+                             Console.Write("{0}, ", b);
+                         }
+                     }
+                 }
+             }
+             // The example displays the following output:
+             // 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
+             </code>
+             </example>
+             <seealso cref="M:System.Array.Reverse(System.Array)"/>
+             <seealso cref="O:System.Array.Reverse"/>
+        </member>
+        <member name="T:elp87.TagReader.Generic">
+            <summary>
+            Provides static generic methods
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.Generic.Add``1(``0[],``0)">
+            <summary>
+            Adds element in the end of array and returns new instance of array.
+            </summary>
+            <typeparam name="T">The type of array elements.</typeparam>
+            <param name="array">Initial array</param>
+            <param name="element">Element that should be added to array</param>
+            <returns>New instance of array with added element in the end</returns>
+            <example>
+            <code lang="C#">
+            using elp87.TagReader;
+            using System;
+            
+            namespace Example
+            {
+                class Program
+                {
+                    static void Main(string[] args)
+                    {
+                        int[] array = new int[] { 0, 1, 2, 3, 4 };
+                        int[] newArray = Generic.Add&lt;int&gt;(array, 5);
+            
+                        foreach (int num in newArray)
+                        {
+                            Console.Write("{0}, ", num);
+                        }
+                    }
+                }
+            }
+            // The example displays the following output:
+            // 0, 1, 2, 3, 4, 5,
+            </code>
+            It is not necessarily to indicate type of elements, but <c>array</c> and <c>element</c> should be the same type
+            <code lang="C#">
+            int[] newArray = Generic.Add(array, 5);
+            </code>
+            You can get new array as initial one.
+            <code lang="C#">
+            int[] array = new int[] { 0, 1, 2, 3, 4 };
+            array = Generic.Add(array, 5);
+            </code>
+            </example>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.Frame">
+            <summary>
+            An abstract base class that provides general functionality for all frames
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.Frame._flags">
+            <summary>
+            Flag fields of current frame.
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.Frame._frameData">
+            <summary>
+            Byte array that contains frame data excluding drame header and header extra data.
+            </summary>
+            <remarks>
+            Note! This array doesn't contain text encoding byte in all text frames.
+            </remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.Frame.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.Frame"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.Frame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Main inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.Frame"/> class.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.Frame.flags">
+            <summary>
+            Gets flag fields of current frame.
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.LanguageTimeStampTextFrame">
+            <summary>
+            This abstract base class provides general functionality for all text frames with language and time stamp information
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.LanguageTextFrame">
+            <summary>
+            This abstract base class provides general functionality for all text frames with language information
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.TextFrame">
+            <summary>
+            This abstract base class provides general functionality for all frames that contain text information with text encoding
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.TextFrame._encoding">
+            <summary>
+            Encoding of text information fields
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TextFrame.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.TextFrame"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TextFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Main inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.TextFrame"/> class.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TextFrame.GetString(System.Byte[])">
+            <summary>
+            Returns string from byte array according current text encoding
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TextFrame.RemoveBomFromData(System.Byte[])">
+            <summary>
+            Returns byte array without byte order mark for <see cref="F:elp87.TagReader.id3v2.Abstract.TextFrame.TextEncoding.UTF16"/>
+            </summary>
+            <param name="dataWithBom">Byte array contained byte order mark</param>
+            <returns>Byte array without byte order mark</returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TextFrame.GetStringCount(System.String)">
+            <summary>
+            Returns count of strings contained in general string 
+            </summary>
+            <param name="text">General string</param>
+            <returns>Cunt of strings</returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TextFrame.SetEncoding(System.Byte)">
+            <summary>
+            Sets encoding in accordance with text encoding byte
+            </summary>
+            <param name="encodeByte"></param>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.TextFrame.TextEncoding">
+            <summary>
+            Specifies text encodings for text frames
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.TextFrame.TextEncoding.ISO_8859_1">
+            <summary> ISO-8859-1.Terminated with $00. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.TextFrame.TextEncoding.UTF16">
+            <summary> UTF-16 encoded Unicode with BOM. Terminated with $00 00. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.TextFrame.TextEncoding.UTF16_BE">
+            <summary> UTF-16BE encoded Unicode without BOM. Terminated with $00 00. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.TextFrame.TextEncoding.UTF8">
+            <summary>
+            UTF-8 encoded Unicode. Terminated with $00.
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.LanguageTextFrame._language">
+            <summary>
+            Language of frame
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.LanguageTextFrame.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.LanguageTextFrame"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.LanguageTextFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Main inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.LanguageTextFrame"/> class.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.LanguageTextFrame.GetLanguage">
+            <summary>
+            Returns language value from <see cref="F:elp87.TagReader.id3v2.Abstract.Frame._frameData"/>
+            </summary>
+            <returns>Language value.</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.LanguageTextFrame.Language">
+            <summary>
+            Gets language.
+            </summary>
+            <exception cref="T:elp87.TagReader.id3v2.Exceptions.IncorrectLanguageException">Language string length is not equal 3.</exception>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.LanguageTimeStampTextFrame._timeStampFormat">
+            <summary>
+            Time stamps format
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.LanguageTimeStampTextFrame.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.LanguageTimeStampTextFrame"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.LanguageTimeStampTextFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Main inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.LanguageTimeStampTextFrame"/> class.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.LanguageTimeStampTextFrame.GetTimeStamp(System.Byte)">
+            <summary>
+            Returns time stamps format from time stamp byte
+            </summary>
+            <param name="timeStampByte">Time stamp format byte</param>
+            <returns>Time stamp format</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.LanguageTimeStampTextFrame.TimeStampFormat">
+            <summary>
+            Gets time stamps format
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Exceptions.IncorrectLanguageException">
+            <summary>
+            The exception that is thrown when there is set incorrect language value.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.IncorrectLanguageException.#ctor">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.IncorrectLanguageException"/>
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.IncorrectLanguageException.#ctor(System.String,System.String,System.DateTime)">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.IncorrectLanguageException"/> with a specified error message, cause of error and time of error.
+            </summary>
+            <param name="message">A String that describes the error. The content of <c>message</c> is intended to be understood by humans.</param>
+            <param name="cause">A String that describes the cause of error. The content of <c>cause</c> should be useful for software developers</param>
+            <param name="time">Time of exception</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.IncorrectLanguageException.ErrorTimeStamp">
+            <summary>
+            Time of exception
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.IncorrectLanguageException.CauseOfError">
+            <summary>
+            Cause of exception
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.OwnerIDFrame">
+            <summary>
+            This abstract base class provides general functionality for all frames owner identification
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.OwnerIDFrame._ownerID">
+            <summary>
+            Owner identifier
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.OwnerIDFrame._data">
+            <summary>
+            Actual byte data
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.OwnerIDFrame._terminatorPos">
+            <summary>
+            Position of string terminator
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.OwnerIDFrame.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.OwnerIDFrame"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.OwnerIDFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Main inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.OwnerIDFrame"/> class.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.OwnerIDFrame.GetData">
+            <summary>
+            Returns byte data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.OwnerIDFrame.ParseFrame(System.Byte[])">
+            <summary>
+            Virtual method that parse frame data to compliant fields
+            </summary>
+            <param name="frameData">Frame  byte array</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.OwnerIDFrame.ReadOwnerID(System.Byte[],System.Int32)">
+            <summary>
+            Reads owner identifier from frame byte array
+            </summary>
+            <param name="frameData">Frame  byte array</param>
+            <param name="terminatorPos">Position of string terminator</param>
+            <returns>Owner ID string</returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.OwnerIDFrame.ReadData(System.Byte[],System.Int32)">
+            <summary>
+            Reads actual byte data from frame byta array
+            </summary>
+            <param name="frameData">Frame  byte array</param>
+            <param name="position">Position of string terminator</param>
+            <returns>Actual data</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.OwnerIDFrame.OwnerID">
+            <summary>
+            Gets owner identifier
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame">
+            <summary>
+            This abstract base class provides general functionality for numeric text frames that contains "slash" character
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame._numericString">
+            <summary>
+            String value of frame.
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame._number">
+            <summary>
+            Main number value.
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame._totalNumber">
+            <summary>
+            Total number.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Main inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame"/> class.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame.ToString">
+            <summary>
+            Returns string value of frame.
+            </summary>
+            <returns>String value of frame.</returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame.ParseNumericString(System.String)">
+            <summary>
+            Parse frame numeric string to compliant fields
+            </summary>
+            <param name="numericString">Numeric string</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame.NumericString">
+            <summary>
+            Gets string value of frame.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame.Number">
+            <summary>
+            Gets main number value.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.SlashNumericStringFrame.TotalNumber">
+            <summary>
+            Gets total number.
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.TimeStamp">
+            <summary>
+            Provides enums and static methods for time stamps
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TimeStamp.GetTimeStamp(System.Byte)">
+            <summary>
+            Returns time stamps format from time stamp byte
+            </summary>
+            <param name="timeStampByte">Time stamp format byte</param>
+            <returns>Time stamp format</returns>
+            <seealso cref="T:elp87.TagReader.id3v2.Abstract.TimeStamp.TimeStampFormat"/>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.TimeStamp.TimeStampFormat">
+            <summary>
+            Specifies time stamp formats
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.TimeStamp.TimeStampFormat.MpegAbsoluteTime">
+            <summary> Absolute time, 32 bit sized, using MPEG frames as unit </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.TimeStamp.TimeStampFormat.MsAbsoluteTime">
+            <summary> Absolute time, 32 bit sized, using milliseconds as unit </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.TimeStampFrame">
+            <summary>
+            This abstract base class provides general functionality for frames with time stamps
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.TimeStampFrame._timeStampFormat">
+            <summary>
+            Time stamps format
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TimeStampFrame.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.TimeStampFrame"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TimeStampFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Main inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.TimeStampFrame"/> class.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TimeStampFrame.GetTimeStamp(System.Byte)">
+            <summary>
+            Returns time stamps format from time stamp byte
+            </summary>
+            <param name="timeStampByte">Time stamp format byte</param>
+            <returns>Time stamp format</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.TimeStampFrame.TimeStampFormat">
+            <summary>
+            Gets time stamps format
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.TimeStampTextFrame">
+            <summary>
+            This abstract base class provides general functionality for all text frames with time stamp information
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.TimeStampTextFrame._timeStampFormat">
+            <summary>
+            Time stamps format
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TimeStampTextFrame.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.TimeStampTextFrame"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TimeStampTextFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Main inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.TimeStampTextFrame"/> class.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.TimeStampTextFrame.GetTimeStamp(System.Byte)">
+            <summary>
+            Returns time stamps format from time stamp byte
+            </summary>
+            <param name="timeStampByte">Time stamp format byte</param>
+            <returns>Time stamp format</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.TimeStampTextFrame.TimeStampFormat">
+            <summary>
+            Gets time stamps format
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Abstract.UserDefinedFrame">
+            <summary>
+            This abstract base class provides general functionality for frames with user defined information
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.UserDefinedFrame._description">
+            <summary>
+            Frame description
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.UserDefinedFrame._value">
+            <summary>
+            User defined information value
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Abstract.UserDefinedFrame._terminatorPos">
+            <summary>
+            Position of string terminator
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.UserDefinedFrame.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.UserDefinedFrame"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.UserDefinedFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Main inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Abstract.UserDefinedFrame"/> class.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.UserDefinedFrame.ParseFrame(System.Byte[])">
+            <summary>
+            Parse frame data to compliant fields.
+            </summary>
+            <param name="frameData">Frame data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.UserDefinedFrame.ParseDescription(System.Byte[])">
+            <summary>
+            Parse description from byte array.
+            </summary>
+            <param name="frameData">Byte array.</param>
+            <returns>Description.</returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Abstract.UserDefinedFrame.ParseValue(System.Byte[])">
+            <summary>
+            Abstract method that should return user defined information value from byte array.
+            </summary>
+            <param name="frameData">Byte array.</param>
+            <returns>User defined information value.</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.UserDefinedFrame.Description">
+            <summary>
+            Gets frame description.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Abstract.UserDefinedFrame.Value">
+            <summary>
+            Gets user defined information value.
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.UrlFrameSet">
+            <summary>
+            This class contains set of all URL link frames
+            </summary>
+            <remarks>For details read "ID3 tag version 2.4.0 - Native Frames" section 4.3.</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UrlFrameSet.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UrlFrameSet"/>
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WCOM">
+            <summary>
+            Gets or sets Commercial information
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WCOP">
+            <summary>
+            Gets or sets Copyright/Legal information
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WOAF">
+            <summary>
+            Gets or sets Official audio file webpage
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WOAR">
+            <summary>
+            Gets or sets Official artist/performer webpage
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WOAS">
+            <summary>
+            Gets or sets Official audio source webpage
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WORS">
+            <summary>
+            Gets or sets Official Official Internet radio station homepage
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WPAY">
+            <summary>
+            Gets or sets Payment
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WPUB">
+            <summary>
+            Gets or sets Publishers official webpage
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WXXX">
+            <summary>
+            Gets or sets User defined URL link frames
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.AttachedPictureFrame">
+            <summary>
+            Provides functionality for attached picture frames.
+            </summary>
+            <remarks>This class allows to read APIC frames. For details read "ID3 tag version 2.4.0 - Native Frames"</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.ID3V2.APIC"/>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.AttachedPictureFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.AttachedPictureFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.GetPictureData">
+            <summary>
+            Returns byte array of attached picture.
+            </summary>
+            <returns>Byte array of picture data</returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.GetPicture">
+            <summary>
+            Returns instanse of <see cref="T:System.Drawing.Image"/> that contains frame picture
+            </summary>
+            <returns>instanse of <see cref="T:System.Drawing.Image"/> that contains frame picture</returns>
+            <example>
+            <code lang="C#">
+            MP3File test = new MP3File(_fileNameMP3);
+            Image image = test.Id3v2.APIC[0].GetPicture();
+            image.Save(_fileNamePicSave);
+            </code>
+            Here is an example of saving the file to disk from mp3 file
+            </example>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.MimeType">
+            <summary>
+            Gets MIME type and subtype for the image.
+            </summary>
+            <remarks>Usually this property is equal <c>image/jpeg</c>.</remarks>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.Description">
+            <summary>
+            Gets short description of the picture.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureType">
+            <summary>
+            Gets picture type
+            </summary>
+            <seealso cref="T:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes"/>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes">
+            <summary>
+            Specifies available picture types
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.Other">
+            <summary> Other </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.FileIcon32PNG">
+            <summary> 32x32 pixels 'file icon' (PNG only) </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.OtherFileIcon">
+            <summary> Other file icon </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.CoverFront">
+            <summary> Cover (front) </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.CoverBack">
+            <summary> Cover (back) </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.LeafletPage">
+            <summary> Leaflet page </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.Media">
+            <summary> Media (e.g. label side of CD) </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.LeadArtist">
+            <summary> Lead artist/lead performer/soloist </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.Artist">
+            <summary> Artist/performer </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.Conductor">
+            <summary> Conductor </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.Band">
+            <summary> Band/Orchestra </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.Composer">
+            <summary> Composer </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.Lyricist">
+            <summary> Lyricist/text writer </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.RecordingLocation">
+            <summary> Recording Location </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.DuringRecording">
+            <summary> During recording </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.DuringPerformance">
+            <summary> During performance </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.ScreenCapture">
+            <summary> Movie/video screen capture </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.BrightColouredFish">
+            <summary> A bright coloured fish </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.Illustration">
+            <summary> Illustration </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.ArtistLogo">
+            <summary> Band/artist logotype </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.AttachedPictureFrame.PictureTypes.PublisherLogo">
+            <summary> Publisher/Studio logotype </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.ContentTypeFrame">
+            <summary>
+            Provides functionality for content types frames.
+            </summary>
+            <remarks>
+            This class allows to read TCON frames. For details read "ID3 tag version 2.4.0 - Native Frames"
+            </remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.TCON"/>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.TextInfoFrame">
+            <summary>
+            Provides functionality for most of text information frames.
+            </summary>
+            <remarks>For details read "ID3 tag version 2.4.0 - Native Frames" section 4.2.</remarks>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Frames.TextInfoFrame._values">
+            <summary>
+            Array of values
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.TextInfoFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.TextInfoFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.TextInfoFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.TextInfoFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.TextInfoFrame.ToString">
+            <summary>
+            Returns first value of current instance
+            </summary>
+            <returns>First value if current instance</returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.TextInfoFrame.GetValues">
+            <summary>
+            Returns array of all values
+            </summary>
+            <returns>Array of all values</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.TextInfoFrame.Item(System.Int32)">
+            <summary>
+            Gets the element at the specified index.
+            </summary>
+            <param name="index">The zero-based index of the element to get or set.</param>
+            <returns>The element of frame.</returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.ContentTypeFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.ContentTypeFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.ContentTypeFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.ContentTypeFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.DateInfoFrame">
+            <summary>
+            Provides functionality for text info frames with date.
+            </summary>
+            <remarks>
+            This class allows to read TDEN, TDOR, TDRC, TDRL and TDTG frames. For details read "ID3 tag version 2.4.0 - Native Frames"
+            </remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.DateInfoFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.DateInfoFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.DateInfoFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.DateInfoFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DateInfoFrame.Date">
+            <summary>
+            Gets date value of frame
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DateInfoFrame.Year">
+            <summary>
+            Gets the year component of the date represented by this instance.
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.DeliveredFrameSet">
+            <summary>
+            This class contains set of all "Derived and subjective properties" text info frames
+            </summary>
+            <remarks>For details read "ID3 tag version 2.4.0 - Native Frames" section 4.2.3.</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.DeliveredFrameSet"/>
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.TBPM">
+            <summary>
+            Gets or sets BPM
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.TLEN">
+            <summary>
+            Gets or sets Length
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.TKEY">
+            <summary>
+            Gets or sets Initial key
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.TLAN">
+            <summary>
+            Gets or sets Language
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.TCON">
+            <summary>
+            Gets or sets Content type
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.TFLT">
+            <summary>
+            Gets or sets File type
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.TMED">
+            <summary>
+            Gets or sets Media type
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.DeliveredFrameSet.TMOO">
+            <summary>
+            Gets or sets Mood
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.IdentificationFrameSet">
+            <summary>
+            This class contains set of all identification text info frames
+            </summary>
+            <remarks>For details read "ID3 tag version 2.4.0 - Native Frames" section 4.2.1.</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.IdentificationFrameSet"/>
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TIT1">
+            <summary>
+            Gets or sets Content group description
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TIT2">
+            <summary>
+            Gets or sets Title/Songname/Content description
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TIT3">
+            <summary>
+            Gets or sets Subtitle/Description refinement
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TALB">
+            <summary>
+            Gets or sets Album/Movie/Show title
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TOAL">
+            <summary>
+            Gets or sets Original album/movie/show title
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TRCK">
+            <summary>
+            Gets or sets Track number/Position in set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TPOS">
+            <summary>
+            Gets or sets Part of a set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TSST">
+            <summary>
+            Gets or sets Set subtitle
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TSRC">
+            <summary>
+            Gets or sets ISRC
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.LicensesFrameSet">
+            <summary>
+            This class contains set of all "Rights and license" text info frames
+            </summary>
+            <remarks>For details read "ID3 tag version 2.4.0 - Native Frames" section 4.2.4.</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.LicensesFrameSet.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.LicensesFrameSet"/>
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.LicensesFrameSet.TCOP">
+            <summary>
+            Gets or sets Copyright message
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.LicensesFrameSet.TPRO">
+            <summary>
+            Gets or sets Produced notice
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.LicensesFrameSet.TPUB">
+            <summary>
+            Gets or sets Publisher
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.LicensesFrameSet.TOWN">
+            <summary>
+            Gets or sets File owner/licensee
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.LicensesFrameSet.TRSN">
+            <summary>
+            Gets or sets Internet radio station name
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.LicensesFrameSet.TRSO">
+            <summary>
+            Gets or sets Internet radio station owner
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Exceptions.InvalidUfidDataException">
+            <summary>
+            The exception that is thrown when there is set invalid unique file identifier
+            </summary>
+            <remarks>Usually this exeption is thrown when unique file identifier length is more then 64 byte.</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.InvalidUfidDataException.#ctor">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.InvalidUfidDataException"/>.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.InvalidUfidDataException.#ctor(System.String)">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.InvalidUfidDataException"/> with a specified error message.
+            </summary>
+            <param name="message">A <see cref="T:System.String"/> that describes the error. The content of message is intended to be understood by humans. The caller of this constructor is required to ensure that this string has been localized for the current system culture. </param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.InvalidUfidDataException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.Exceptions.InvalidUfidDataException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="inner">The exception that is the cause of the current exception. If the <c>innerException</c> parameter is not null, the current exception is raised in a catch block that handles the inner exception. </param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.InvalidUfidDataException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.Exceptions.InvalidUfidDataException"/> class with serialized data.
+            </summary>
+            <param name="info">The object that holds the serialized object data. </param>
+            <param name="context">The contextual information about the source or destination. </param>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.MusicIdFrame">
+            <summary>
+            Provides functionality for Music CD identifier frames.
+            </summary>
+            <remarks>This class allows to read MCDI frames. For details read "ID3 tag version 2.4.0 - Native Frames"</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.ID3V2.MCDI"/>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.MusicIdFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.MusicIdFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.MusicIdFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.MusicIdFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.MusicIdFrame.GetData">
+            <summary>
+            Returns binary dump of the CD Table Of Contents.
+            </summary>
+            <returns>Binary dump of the CD Table Of Contents.</returns>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.NumericStringFrame">
+            <summary>
+            Provides functionality for text info frames with numbers.
+            </summary>
+            <remarks>This class allows to read TBPM, TLEN and TDLY frames. For details read "ID3 tag version 2.4.0 - Native Frames"</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.NumericStringFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.NumericStringFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.NumericStringFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.NumericStringFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.NumericStringFrame.ToString">
+            <summary>
+            Returns "Number" property represented as string
+            </summary>
+            <returns>"Number" property represented as string</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.NumericStringFrame.NumericString">
+            <summary>
+            Gets frame value represented as string
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.NumericStringFrame.Number">
+            <summary>
+            Gets frame value represented as number
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.OtherFrameSet">
+            <summary>
+            This class contains set of all Other text info frames
+            </summary>
+            <remarks>For details read "ID3 tag version 2.4.0 - Native Frames" section 4.2.5.</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.OtherFrameSet.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.OtherFrameSet"/>
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TOFN">
+            <summary>
+            Gets or sets Original filename
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TDLY">
+            <summary>
+            Gets or sets Playlist delay
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TDEN">
+            <summary>
+            Gets or sets Encoding time
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TDOR">
+            <summary>
+            Gets or sets Original release time
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TDRC">
+            <summary>
+            Gets or sets Recording time
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TDRL">
+            <summary>
+            Gets or sets Release time
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TDTG">
+            <summary>
+            Gets or sets Tagging time
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TSSE">
+            <summary>
+            Gets or sets Software/Hardware and settings used for encoding
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TSOA">
+            <summary>
+            Gets or sets Album sort order
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TSOP">
+            <summary>
+            Gets or sets Performer sort order
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TSOT">
+            <summary>
+            Gets or sets Title sort order
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TXXX">
+            <summary>
+            Gets or sets User defined text frames
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.PersonListTextFrame">
+            <summary>
+            Provides functionality for frames that contain mapping between people and their roles.
+            </summary>
+            <remarks>This class allows to read TMCL and TIPL frames. For details read "ID3 tag version 2.4.0 - Native Frames".</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PersonListTextFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.PersonListTextFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PersonListTextFrame.AddData(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Read standart frame data and add information to "person-role" array.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="byteArray">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PersonListTextFrame.GetValue(System.Int32)">
+            <summary>
+            Returns pair "role-person" at the specified index 
+            </summary>
+            <param name="index">The zero-based index of the element to get</param>
+            <returns>Instance of <see cref="T:elp87.TagReader.id3v2.Frames.PersonListTextFrame.PersonMapItem"/> that represent a pair "role-person"</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonListTextFrame.ListCount">
+            <summary>
+            Gets the number of elements actually contained in this type of frames
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.PersonListTextFrame.PersonMapItem">
+            <summary>
+            This structure represents person and his role.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonListTextFrame.PersonMapItem.person">
+            <summary>
+            Gets and sets person name.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonListTextFrame.PersonMapItem.role">
+            <summary>
+            Gets and sets current person's role.
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.PersonListTextFrame.PersonListItemFrame">
+            <summary>
+            Represents a frame reader that can read TMCL or TIPL frame.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PersonListTextFrame.PersonListItemFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.PersonListTextFrame.PersonListItemFrame"/> and read frame data.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PersonListTextFrame.PersonListItemFrame.GetString">
+            <summary>
+            Returns string value of frame.
+            </summary>
+            <returns>Frame value.</returns>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.PersonsFrameSet">
+            <summary>
+            This class contains set of all "involved persons" text info frames
+            </summary>
+            <remarks>For details read "ID3 tag version 2.4.0 - Native Frames" section 4.2.2.</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PersonsFrameSet.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.PersonsFrameSet"/>
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TPE1">
+            <summary>
+            Gets or sets Lead artist/Lead performer/Soloist/Performing group
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TPE2">
+            <summary>
+            Gets or sets Band/Orchestra/Accompaniment
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TPE3">
+            <summary>
+            Gets or sets Conductor
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TPE4">
+            <summary>
+            Gets or sets "Interpreted, remixed, or otherwise modified by"
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TOPE">
+            <summary>
+            Gets or sets Original artist/performer
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TEXT">
+            <summary>
+            Gets or sets Lyricist/Text writer
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TOLY">
+            <summary>
+            Gets or sets Original lyricist/text writer
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TCOM">
+            <summary>
+            Gets or sets Composer
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TMCL">
+            <summary>
+            Gets or sets Musician credits list
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TIPL">
+            <summary>
+            Gets or sets Involved people list
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TENC">
+            <summary>
+            Gets or sets "Encoded by"
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.PositionFrame">
+            <summary>
+            Provides functionality for position text frames.
+            </summary>
+            <remarks>This class allows to read TRCK and TPOS frames. For details read "ID3 tag version 2.4.0 - Native Frames"</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PositionFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.PositionFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PositionFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.PositionFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.PrivateFrame">
+            <summary>
+            Provides functionality for private frames.
+            </summary>
+            <remarks>This class allows to read PRIV frames. For details read "ID3 tag version 2.4.0 - Native Frames"</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.ID3V2.PRIV"/>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PrivateFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.PrivateFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PrivateFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.PrivateFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.PrivateFrame.ReadData(System.Byte[],System.Int32)">
+            <summary>
+            Reads actual byte data from frame byta array 
+            </summary>
+            <param name="frameData">Frame byte array</param>
+            <param name="position">Position of string terminator</param>
+            <returns></returns>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Dictionaries">
+            <summary>
+            Provides dictionaries for work with id3v2 tags
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Dictionaries.frameIDs">
+            <summary>
+            Dictionary of supported frame types
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Exceptions.NoID3V2TagException">
+            <summary>
+            The exception that is thrown when there is in no id2v2 tag in mp3 file
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.NoID3V2TagException.#ctor">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.NoID3V2TagException"/>
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.NoID3V2TagException.#ctor(System.String,System.String,System.DateTime)">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.NoID3V2TagException"/> with a specified error message, cause of error and time of error.
+            </summary>
+            <param name="message">A String that describes the error. The content of <c>message</c> is intended to be understood by humans.</param>
+            <param name="cause">A String that describes the cause of error. The content of <c>cause</c> should be useful for software developers</param>
+            <param name="time">Time of exception</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.NoID3V2TagException.ErrorTimeStamp">
+            <summary>
+            Time of exception
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.NoID3V2TagException.CauseOfError">
+            <summary>
+            Cause of exception
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Exceptions.UnknownEncodingException">
+            <summary>
+            The exception that is thrown when there is set unknown text encoding value
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.UnknownEncodingException.#ctor">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.UnknownEncodingException"/>
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.UnknownEncodingException.#ctor(System.String,System.String,System.DateTime)">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.UnknownEncodingException"/> with a specified error message, cause of error and time of error.
+            </summary>
+            <param name="message">A String that describes the error. The content of <c>message</c> is intended to be understood by humans.</param>
+            <param name="cause">A String that describes the cause of error. The content of <c>cause</c> should be useful for software developers</param>
+            <param name="time">Time of exception</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.UnknownEncodingException.ErrorTimeStamp">
+            <summary>
+            Time of exception
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.UnknownEncodingException.CauseOfError">
+            <summary>
+            Cause of exception
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Exceptions.UnsupportedTagVersionException">
+            <summary>
+            The exception that is thrown when there is unsupported id3v2 tag version in mp3 file
+            </summary>
+            <remarks>This library support id3v2.4 tag version. 
+            Id3v2.3 tag version is partly supported, bit it doesn't cause this exception.
+            Id3v2.2 and lower are unsupported and will be cause exception. 
+            Id3v2.5 and upper are doesn't exist and will be cause this exception too.</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.UnsupportedTagVersionException.#ctor">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.UnsupportedTagVersionException"/>
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.UnsupportedTagVersionException.#ctor(System.String,System.String,System.DateTime)">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.UnsupportedTagVersionException"/> with a specified error message, cause of error and time of error.
+            </summary>
+            <param name="message">A String that describes the error. The content of <c>message</c> is intended to be understood by humans.</param>
+            <param name="cause">A String that describes the cause of error. The content of <c>cause</c> should be useful for software developers</param>
+            <param name="time">Time of exception</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.UnsupportedTagVersionException.ErrorTimeStamp">
+            <summary>
+            Time of exception
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.UnsupportedTagVersionException.CauseOfError">
+            <summary>
+            Cause of exception
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.ExtHeader">
+            <summary>
+            This class provides information from id3v2 extended header
+            </summary>
+            <remarks>
+            In current version it is supported only id3v2.4 extended header
+            </remarks>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.Size">
+            <summary>
+            Gets and sets extended header size
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.IsUpdate">
+            <summary>
+            Gets whether the "Tag is an update" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.IsCRC">
+            <summary>
+            Gets whether the "CRC data present" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.IsRestrictions">
+            <summary>
+            Gets whether the "Tag restrictions" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.CRC">
+            <summary>
+            Gets the CRC value
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.TagSizeRestriction">
+            <summary>
+            Gets tag size restrictions
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.TextEncodingRestriction">
+            <summary>
+            Gets text encoding restrictions
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.TextFieldsSizeRestriction">
+            <summary>
+            Gets text fields size restrictions
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.ImageEncodingRestriction">
+            <summary>
+            Gets image encoding restrictions
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ExtHeader.ImageSizeRestriction">
+            <summary>
+            Gets image size restrictions
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.ExtHeader.TagSizeRestrictions">
+            <summary>
+            Specifies identifiers to indicate tag size restrictions
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TagSizeRestrictions.NoMore1MBTagSize">
+            <summary> No more than 128 frames and 1 MB total tag size.</summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TagSizeRestrictions.NoMore128KBTagSize">
+            <summary> No more than 64 frames and 128 KB total tag size. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TagSizeRestrictions.NoMore40KBTagSize">
+            <summary> No more than 32 frames and 40 KB total tag size. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TagSizeRestrictions.NoMore4KBTagSize">
+            <summary> No more than 32 frames and 4 KB total tag size. </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.ExtHeader.TextEncodingRestrictions">
+            <summary>
+            Specifies identifiers to indicate text encoding restrictions
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TextEncodingRestrictions.NoRestrictions">
+            <summary> No restrictions. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TextEncodingRestrictions.ISO_8859_Or_UTF8_Only">
+            <summary> Strings are only encoded with ISO-8859-1 [ISO-8859-1] or UTF-8 [UTF-8]. </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.ExtHeader.TextFieldsSizeRestrictions">
+            <summary>
+            Specifies identifiers to indicate text fields size restrictions
+            </summary>
+            <remarks>
+            Note that nothing is said about how many bytes is used to represent those characters, since it is encoding dependent. 
+            If a text frame consists of more than one string, the sum of the strungs is restricted as stated.
+            </remarks>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TextFieldsSizeRestrictions.NoRestrictions">
+            <summary> No restrictions </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TextFieldsSizeRestrictions.NoLonger1024Char">
+            <summary> No string is longer than 1024 characters. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TextFieldsSizeRestrictions.NoLonger128Char">
+            <summary> No string is longer than 128 characters. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.TextFieldsSizeRestrictions.NoLonger30Char">
+            <summary> No string is longer than 30 characters. </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.ExtHeader.ImageEncodingRestrictions">
+            <summary>
+            Specifies identifiers to indicate image encoding restrictions
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.ImageEncodingRestrictions.NoRestrictions">
+            <summary> No restrictions </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.ImageEncodingRestrictions.PngOrJpegOnly">
+            <summary> Images are encoded only with PNG [PNG] or JPEG [JFIF]. </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.ExtHeader.ImageSizeRestrictions">
+            <summary>
+            Specifies identifiers to indicate image size restrictions
+            </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.ImageSizeRestrictions.NoRestrictions">
+            <summary> No restrictions. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.ImageSizeRestrictions.Smaller256Pixel">
+            <summary> All images are 256x256 pixels or smaller. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.ImageSizeRestrictions.Smaller64Pixel">
+            <summary> All images are 64x64 pixels or smaller. </summary>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.ExtHeader.ImageSizeRestrictions.Exactly64Pixel">
+            <summary> All images are exactly 64x64 pixels, unless required otherwise. </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Exceptions.FlagUnsetException">
+            <summary>
+            The exception that is thrown when trying to get value of unset flag
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.FlagUnsetException.#ctor">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.FlagUnsetException"/>
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.FlagUnsetException.#ctor(System.String,System.String,System.DateTime)">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.FlagUnsetException"/> with a specified error message, cause of error and time of error.
+            </summary>
+            <param name="message">A String that describes the error. The content of <c>message</c> is intended to be understood by humans.</param>
+            <param name="cause">A String that describes the cause of error. The content of <c>cause</c> should be useful for software developers</param>
+            <param name="time">Time of exception</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.FlagUnsetException.ErrorTimeStamp">
+            <summary>
+            Time of exception
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.FlagUnsetException.CauseOfError">
+            <summary>
+            Cause of exception
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.FrameReader">
+            <summary>
+            This class provides functionality to construct new frames from tag byte array
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.FrameReader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.FrameReader"/> class
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameReader.Id">
+            <summary>
+            Gets frame identificator
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameReader.FrameSize">
+            <summary>
+            Gets frame size, excluding frame header
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Exceptions.NotUsableFlagException">
+            <summary>
+            The exception that is thrown when there is set not usable flag in flag field
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.NotUsableFlagException.#ctor">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.NotUsableFlagException"/>
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.NotUsableFlagException.#ctor(System.String,System.String,System.DateTime)">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.NotUsableFlagException"/> with a specified error message, cause of error and time of error.
+            </summary>
+            <param name="message">A String that describes the error. The content of <c>message</c> is intended to be understood by humans.</param>
+            <param name="cause">A String that describes the cause of error. The content of <c>cause</c> should be useful for software developers</param>
+            <param name="time">Time of exception</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.NotUsableFlagException.ErrorTimeStamp">
+            <summary>
+            Time of exception
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.NotUsableFlagException.CauseOfError">
+            <summary>
+            Cause of exception
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.FrameFlagSet">
+            <summary>
+            This class provides information about frame header flags
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.FrameFlagSet.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.FrameFlagSet"/> that is empty
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.FrameFlagSet.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.FrameFlagSet"/>
+            </summary>
+            <param name="flagBytes">Flags byte array</param>
+            <exception cref="T:elp87.TagReader.id3v2.Exceptions.NotUsableFlagException">Not usable flag is set</exception>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.FrameFlagSet.GetExtraData(System.Int32,System.Byte[])">
+            <summary>
+            Returns length of Grouping, EncryptMethod and DataLength data and sets their value from frame byte array
+            </summary>
+            <param name="position">Zero-based position of extra data start</param>
+            <param name="tagArray">Byte array of current tag</param>
+            <returns>Length of Grouping, EncryptMethod and DataLength data</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.TagAlterPreservation">
+            <summary>
+            Gets and sets whether "Tag alter preservation" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.FileAlterPreservation">
+            <summary>
+            Gets and sets whether "File alter preservation" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.ReadOnly">
+            <summary>
+            Gets and sets whether "Read only" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.GroupingIdentity">
+            <summary>
+            Gets and sets whether "Grouping identity" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.Compression">
+            <summary>
+            Gets and sets whether "Compression" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.Encryption">
+            <summary>
+            Gets and sets whether "Encryption" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.Unsynchronisation">
+            <summary>
+            Gets and sets whether "Unsynchronisation" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.DataLengthIndicator">
+            <summary>
+            Gets and sets whether "Data length indicator" flag is set
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.Grouping">
+            <summary>
+            Gets group identifier byte if "Grouping identity" flag is set.
+            </summary>
+            <exception cref="T:elp87.TagReader.id3v2.Exceptions.FlagUnsetException">"Grouping identity" flag is unset</exception>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.EncryptMethod">
+            <summary>
+            Gets encryption method byte if "Encryption" flag is set
+            </summary>
+            <exception cref="T:elp87.TagReader.id3v2.Exceptions.FlagUnsetException">"Encryption flag is unset</exception>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameFlagSet.DataLength">
+            <summary>
+            Gets data length indicator is the value one would write as the 'Frame length' if all of the frame format flags were zeroed
+            </summary>
+            <exception cref="T:elp87.TagReader.id3v2.Exceptions.FlagUnsetException">Data Length Indicator flag is unset</exception>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.UniqueFileIdentifierFrame">
+            <summary>
+            Provides functionality for unique file identifier frames.
+            </summary>
+            <remarks>This class allows to read UFID frames. For details read "ID3 tag version 2.4.0 - Native Frames"</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.ID3V2.UFID"/>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UniqueFileIdentifierFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UniqueFileIdentifierFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UniqueFileIdentifierFrame.ReadData(System.Byte[],System.Int32)">
+            <summary>
+            Reads actual byte data from frame byta array
+            </summary>
+            <param name="frameData">Frame  byte array</param>
+            <param name="position">Position of string terminator</param>
+            <returns>Actual data</returns>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.UnsunchTextFrame">
+            <summary>
+            Provides functionality for Unsynchronised text frames.
+            </summary>
+            <remarks>This class allows to read USLT and COMM frames. For details read "ID3 tag version 2.4.0 - Native Frames"</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.ID3V2.USLT"/>
+            <seealso cref="P:elp87.TagReader.id3v2.ID3V2.COMM"/>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UnsunchTextFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UnsunchTextFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UnsunchTextFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UnsunchTextFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UnsunchTextFrame.Description">
+            <summary>
+            Gets short frame description
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UnsunchTextFrame.Value">
+            <summary>
+            Gets actual frame text
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.UrlFrame">
+            <summary>
+            Provides functionality for most of URL link frames.
+            </summary>
+            <remarks>For details read "ID3 tag version 2.4.0 - Native Frames" section 4.3.</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.ID3V2.UrlFrames"/>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UrlFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UrlFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UrlFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UrlFrame"/> and read frame data.
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Frames.UrlFrame.Link">
+            <summary>
+            Gets actual frame URL link.
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.UserDefinedTextFrame">
+            <summary>
+            Provides functionality for user defined text frames.
+            </summary>
+            <remarks>This class allows to read TXXX frames. For details read "ID3 tag version 2.4.0 - Native Frames"</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TXXX"/>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UserDefinedTextFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UserDefinedTextFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UserDefinedTextFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UserDefinedTextFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UserDefinedTextFrame.ParseValue(System.Byte[])">
+            <summary>
+            Parse frame data and returns actual text info value.
+            </summary>
+            <param name="frameData">Byte array.</param>
+            <returns>Actual text info value</returns>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Frames.UserDefinedUrlFrame">
+            <summary>
+            Provides functionality for user defined URL link frames.
+            </summary>
+            <remarks>This class allows to read WXXX frames. For details read "ID3 tag version 2.4.0 - Native Frames"</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Frames.UrlFrameSet.WXXX"/>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UserDefinedUrlFrame.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UserDefinedUrlFrame"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UserDefinedUrlFrame.#ctor(elp87.TagReader.id3v2.FrameFlagSet,System.Byte[])">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.id3v2.Frames.UserDefinedUrlFrame"/> and read frame data
+            </summary>
+            <param name="flags">Flag fields of current frame.</param>
+            <param name="frameData">Byte array that contains frame data excluding frame header and header extra data.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Frames.UserDefinedUrlFrame.ParseValue(System.Byte[])">
+            <summary>
+            Parse frame data and returns actual URL link.
+            </summary>
+            <param name="frameData">Byte array.</param>
+            <returns>Actual URL link.</returns>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.FrameTypeInfo">
+            <summary>
+            This class provides information about frame type.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.FrameTypeInfo.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.FrameTypeInfo"/> class that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.FrameTypeInfo.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.FrameTypeInfo"/> class.
+            </summary>
+            <param name="id">Frame identificator</param>
+            <param name="idDescription">Frame description</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameTypeInfo.Id">
+            <summary>
+            Gets and sets frame identificator.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.FrameTypeInfo.IdDescription">
+            <summary>
+            Gets and sets frame decription.
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Header">
+            <summary>
+            This class provides reading information from id3v2 tag header.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Header.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.Header"/> class.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Header.HeaderArray">
+            <summary>
+            Gets header byte array.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Header.TagVersion">
+            <summary>
+            Gets id3v2 tag version.
+            </summary>
+            <remarks>
+            It means minor version, i.e. <c>TagVersion</c> property will be equal 4 for id3v2.4 tag version.
+            </remarks>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Header.TagRevision">
+            <summary>
+            Gets revision number of id3v2 tag version.
+            </summary>
+            <remarks>
+            Usually it is equal 0.
+            </remarks>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Header.FlagFields">
+            <summary>
+            Gets tag header flag fiels
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Header.TagSize">
+            <summary>
+            Gets id3v2 tag size including extended header,padding, all frames, but excluding header and footer
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Header.FlagField">
+            <summary>
+            This class provides information about tag header flags
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Header.FlagField.#ctor(System.Byte)">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.Header.FlagField"/> class and read info from flag byte
+            </summary>
+            <param name="flagByte">Flag byte</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Header.FlagField.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.Header.FlagField"/> class
+            </summary>
+            <param name="unsynchronisation">Value of "Unsynchronisation" flag</param>
+            <param name="extendedHeader">Value of "Extended header" flag</param>
+            <param name="experimentalIndicator">Value of "Experimental indicator" flag</param>
+            <param name="footer">Value of "Footer present" flag</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Header.FlagField.Unsunc">
+            <summary>
+            Gets value of "Unsynchronisation" flag.
+            </summary>
+            <remarks>This property indicates whether or not unsynchronisation is applied on all frames. "True" indicates usage.</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.ExtendedHeader"/>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.ExperimentalIndicator"/>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.Footer"/>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Header.FlagField.ExtendedHeader">
+            <summary>
+            Gets value of "Extended header" flag.
+            </summary>
+            <remarks>This property indicates whether or not the header is followed by an extended header. 
+            "True" indicates the presence of an extended header.</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.Unsunc"/>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.ExperimentalIndicator"/>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.Footer"/>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Header.FlagField.ExperimentalIndicator">
+            <summary>
+            Gets value of "Experimental indicator" flag.
+            </summary>
+            <remarks>This property is used as an 'experimental indicator'.
+            This flag SHALL always be set when the tag is in an experimental stage.</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.Unsunc"/>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.ExtendedHeader"/>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.Footer"/>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Header.FlagField.Footer">
+            <summary>
+            Gets value of "Footer present" flag.
+            </summary>
+            <remarks>This property indicates that a footer is present at the very end of the tag. 
+            "True" indicates the presence of a footer.</remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.Unsunc"/>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.ExtendedHeader"/>
+            <seealso cref="P:elp87.TagReader.id3v2.Header.FlagField.ExperimentalIndicator"/>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.ID3V2">
+            <summary>
+            This class provides reading id3v2 tags from mp3 files.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.ID3V2.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.ID3V2"/> class and reads tags from file.
+            </summary>
+            <param name="filename">The file to open for reading.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.ID3V2.GetTagArray">
+            <summary>
+            Returns byte array of id3v2 tag.
+            </summary>
+            <returns>Byte array of id3v2 tag.</returns>
+            <exception cref="T:System.NullReferenceException">The tag is empty</exception>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.Header">
+            <summary>
+            Gets id3v2 header.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.ExtHeader">
+            <summary>
+            Gets id3v2 extended header. If it is no extended header in tag, this property returns null
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.IdentificationFrames">
+            <summary>
+            Gets identification frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.PersonsFrames">
+            <summary>
+            Gets involved persons frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.DeliveredFrames">
+            <summary>
+            Gets derived and subjective properties frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.LicensesFrames">
+            <summary>
+            Gets rights and license frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.OtherFrames">
+            <summary>
+            Gets Other text frames and User defined text information frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.UrlFrames">
+            <summary>
+            Gets URL link frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.UFID">
+            <summary>
+            Gets unique file identifier frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.MCDI">
+            <summary>
+            Gets Music CD identifier frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.USLT">
+            <summary>
+            Gets unsynchronised lyrics/text transcription frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.COMM">
+            <summary>
+            Gets comment frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.APIC">
+            <summary>
+            Gets attached picture frames
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.ID3V2.PRIV">
+            <summary>
+            Gets private frames
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Exceptions.InvalidSynchSafeInt32Exception">
+            <summary>
+            The exception that is thrown when there is set invalid synchsafe value
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.InvalidSynchSafeInt32Exception.#ctor">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.InvalidSynchSafeInt32Exception"/>
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Exceptions.InvalidSynchSafeInt32Exception.#ctor(System.String,System.String,System.DateTime)">
+            <summary>
+            Initialize a new instance of <see cref="T:elp87.TagReader.id3v2.Exceptions.InvalidSynchSafeInt32Exception"/> with a specified error message, cause of error and time of error.
+            </summary>
+            <param name="message">A String that describes the error. The content of <c>message</c> is intended to be understood by humans.</param>
+            <param name="cause">A String that describes the cause of error. The content of <c>cause</c> should be useful for software developers</param>
+            <param name="time">Time of exception</param>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.InvalidSynchSafeInt32Exception.ErrorTimeStamp">
+            <summary>
+            Time of exception
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Exceptions.InvalidSynchSafeInt32Exception.CauseOfError">
+            <summary>
+            Cause of exception
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.Synchsafe">
+            <summary>
+            An abstract base class that provides functionality for synchsafe integers
+            </summary>
+            <remarks>
+            <para>In a synchsafe integer, the most significant bit of each byte is zero, making seven bits out of eight available. 
+            So, for example, a 32-bit synchsafe integer can only store 28 bits of information.</para>
+            <para>Examples:</para>
+            <para>(%11111111) is encoded as a 16-bit synchsafe integer (%00000001 01111111).</para>
+            <para>(%11111111 11111111) is encoded as a 24-bit synchsafe integer (%00000011 01111111 01111111).</para>
+            </remarks>
+        </member>
+        <member name="F:elp87.TagReader.id3v2.Synchsafe._synchsafeByte">
+            <summary>
+            Synchsafe integer represented as byte array
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Synchsafe.#ctor">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Synchsafe"/> class
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Synchsafe.#ctor(System.Byte[])">
+            <summary>
+            Inheritable constructor for <see cref="T:elp87.TagReader.id3v2.Synchsafe"/> class with reading synchsafe byte array
+            </summary>
+            <param name="synchsafeByte">Synchsafe integer represented as byte array</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Synchsafe.ToInt">
+            <summary>
+            Returns converted value.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Synchsafe.synchsafeIntToSynchsafeByte(System.Int32)">
+            <summary>
+            Returns byte array respective synchsafe from synchsafe integer.
+            </summary>
+            <param name="syncsafeInt">Syncsafe value.</param>
+            <returns>byte array respective synchsafe</returns>
+            <overloads>Returns Byte array respective synchsafe from synchsafe value</overloads>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.Synchsafe.synchsafeIntToSynchsafeByte(System.Int64)">
+            <summary>
+            Returns byte array respective synchsafe from synchsafe long integer.
+            </summary>
+            <param name="syncsafeLong">Syncsafe value.</param>
+            <returns>Byte array respective synchsafe</returns>
+        </member>
+        <member name="P:elp87.TagReader.id3v2.Synchsafe.SynchSafeInt">
+            <summary>
+            Gets Syncsafe value.
+            </summary>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.SynchsafeInteger">
+            <summary>
+            This class represents 32bit synchsafe integer value
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.SynchsafeInteger.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.SynchsafeInteger"/> class.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.SynchsafeInteger.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.SynchsafeInteger"/> class from synchsafe byte array.
+            </summary>
+            <param name="synchsafeByte">Synchsafe byte array</param>
+            <exception cref="T:elp87.TagReader.id3v2.Exceptions.InvalidSynchSafeInt32Exception">Byte array is 0 length or more then 4.</exception>
+            <remarks>
+            Byte array should be 4 byte length or less, but more then 0 byte.
+            If first bytes are 0, it could be omited. I.e. byte array <c>{0, 0, 63, 17}</c> is equal <c>{63, 17}</c>
+            <code lang="C#">
+            byte[] ssByte0 = { 0, 0, 63, 17 };
+            byte[] ssByte1 = { 63, 17 };
+            SynchsafeInteger ssInt0 = new SynchsafeInteger(ssByte0);
+            SynchsafeInteger ssInt1 = new SynchsafeInteger(ssByte1);
+            int value0 = ssInt0.ToInt();
+            int value1 = ssInt1.ToInt();
+            Console.WriteLine("value0 = {0}", value0);
+            Console.WriteLine("value1 = {0}", value1);
+            // value0 = 8081
+            // value1 = 8081
+            </code>
+            </remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.SynchsafeInteger.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.SynchsafeInteger"/> class from 32bit synchsafe integer value.
+            </summary>
+            <param name="syncsafeInt">32bit synchsafe integer value.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.SynchsafeInteger.ToInt">
+            <summary>
+            Convert syncsafe value of current instance to 32bit integer and returns this value.
+            </summary>
+            <returns>Simple 32bit integer value</returns>
+            <example>
+            <code lang="C#">
+            byte[] ssByte = { 0, 9, 63, 17 };
+            SynchsafeInteger ssInt = new SynchsafeInteger(ssByte);
+            int value = ssInt.ToInt();
+            Console.WriteLine("value = {0}", value);
+            // value = 155537;
+            </code>
+            <para>In this example synchsafe byte array is converted to 32bit integer value.
+            Syncsafe byte array is 0, 9, 63, 17.</para>
+            <para>In bit representation it is</para>
+            <para>0 - 0 0000000</para>
+            <para>9 - 0 0001001</para>
+            <para>63 - 0 0111111</para>
+            <para>17 - 0 0010001</para>
+            <para>Excluding first bits of each value it will be mean 0000000 0001001 0111111 0010001.
+            In decimal representation this value is 155537.</para>
+            </example>
+        </member>
+        <member name="T:elp87.TagReader.id3v2.SynchsafeCRC">
+            <summary>
+            This class represents 32bit CRC value stored as 35 bit synchsafe integer
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.SynchsafeCRC.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.SynchsafeCRC"/> class.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.SynchsafeCRC.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.SynchsafeCRC"/> class from synchsafe byte array.
+            </summary>
+            <param name="synchsafeByte">Synchsafe byte array</param>
+            <exception cref="T:elp87.TagReader.id3v2.Exceptions.InvalidSynchSafeInt32Exception">Synchsafe byte array length should be 5 byte</exception>
+            <remarks>Length of synchsafe byte array should be 5 byte. First 5 bit should be zeroed.</remarks>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.SynchsafeCRC.#ctor(System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:elp87.TagReader.id3v2.SynchsafeCRC"/> class from 64-bit synchsafe integer value.
+            </summary>
+            <param name="SyncsafeLong">64bit synchsafe integer value.</param>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.SynchsafeCRC.ToInt">
+            <summary>
+            Convert syncsafe value of current instance to 32bit integer and returns this value.
+            </summary>
+            <returns>Simple 32bit integer value</returns>
+            <seealso cref="M:elp87.TagReader.id3v2.SynchsafeInteger.ToInt">SynchsafeInteger.ToInt()</seealso>
+        </member>
+        <member name="M:elp87.TagReader.id3v2.SynchsafeCRC.ToByte">
+            <summary>
+            Convert syncsafe value of current instance to byte array.
+            </summary>
+            <returns>Byte array.</returns>
+        </member>
+        <member name="T:elp87.TagReader.Mp3Tag">
+            <summary>
+            This class provides reading mp3 files info.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.Mp3Tag.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.Mp3Tag"/> that is empty.
+            </summary>
+        </member>
+        <member name="M:elp87.TagReader.Mp3Tag.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of <see cref="T:elp87.TagReader.Mp3Tag"/> and read file.
+            </summary>
+            <param name="filename">The file to open for reading.</param>
+        </member>
+        <member name="P:elp87.TagReader.Mp3Tag.Id3v2">
+            <summary>
+            Returns id3v2 tag information.
+            </summary>
+        </member>
+        <member name="P:elp87.TagReader.Mp3Tag.Performer">
+            <summary>
+            Returns performer or artist of this instance
+            </summary>
+            <remarks>
+            <para>If instance of <see cref="P:elp87.TagReader.MP3File.Id3v2"/> is empty or it has no artists, this property returns "".</para>
+            <para>This property returns only first performer if there are several. For full array of performers use Id3v2.PersonsFrames.TPE1.</para>
+            <code lang="C#">
+            MP3File file = new MP3File(filename);
+            string[] performers = file.Id3v2.PersonsFrames.TPE1.GetValues();
+            </code>
+            </remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Frames.PersonsFrameSet.TPE1"/>
+        </member>
+        <member name="P:elp87.TagReader.Mp3Tag.Album">
+            <summary>
+            Returns Album/Movie/Show title of this instance.
+            </summary>
+            <remarks>
+            <para>If instance of <see cref="P:elp87.TagReader.MP3File.Id3v2"/> is empty or it has no album titles, this property returns "".</para>
+            <para>This property returns only first title if there ara several. For full array of titles use Id3v2.IdentificationFrames.TALB.</para>
+            <code lang="C#">
+            MP3File file = new MP3File(filename);
+            string[] albumTitles = file.Id3v2.IdentificationFrames.TALB.GetValues();
+            </code>
+            </remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TALB"/>
+        </member>
+        <member name="P:elp87.TagReader.Mp3Tag.Title">
+            <summary>
+            Returns title of this instance
+            </summary>
+            <remarks>
+            <para>If instance of <see cref="P:elp87.TagReader.MP3File.Id3v2"/> is empty or it has no titles, this property returns "".</para>
+            <para>This property returns only first title if there ara several. For full array of titles use Id3v2.IdentificationFrames.TIT2.</para>
+            <code lang="C#">
+            MP3File file = new MP3File(filename);
+            string[] titles = file.Id3v2.IdentificationFrames.TIT2.GetValues();
+            </code>
+            </remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Frames.IdentificationFrameSet.TIT2"/>
+        </member>
+        <member name="P:elp87.TagReader.Mp3Tag.Year">
+            <summary>
+            Returns year of recording of this instance
+            </summary>
+            <remarks>
+            <para>If instance of <see cref="P:elp87.TagReader.MP3File.Id3v2"/> is empty or it has no recording date, this property returns "".</para>
+            <para>For full date in <see cref="T:System.DateTime"/> use Id3v2.OtherFrames.TDRC.Date.</para>
+            <code lang="C#">
+            MP3File file = new MP3File(filename);
+            DateTime recordingDate = file.Id3v2.OtherFrames.TDRC.Date;
+            </code>
+            </remarks>
+            <seealso cref="P:elp87.TagReader.id3v2.Frames.OtherFrameSet.TDRC"/>
+        </member>
+        <member name="P:elp87.TagReader.Mp3Tag.Filename">
+            <summary>
+            Returns full file name of this instance
+            </summary>
+            <remarks>
+            <para>If this instance of <see cref="T:elp87.TagReader.Mp3Tag"/> is empty, this property returns "". </para>
+            </remarks>
+        </member>
+        <member name="P:elp87.TagReader.Mp3Tag.Size">
+            <summary>
+            Returns size of file in bytes.
+            </summary>
+            <remarks>
+            <para>If instance of <see cref="P:elp87.TagReader.MP3File.Id3v2"/> is empty, this property returns 0</para>
+            </remarks>
+        </member>
+    </members>
+</doc>

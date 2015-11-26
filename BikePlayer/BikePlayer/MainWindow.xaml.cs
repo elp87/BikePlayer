@@ -25,6 +25,7 @@ namespace BikePlayer
             if (result == null || !result.Value) return;
             Mp3File mp3 = new Mp3File(ofDialog.FileName);
             mp3.Play();
+            ContentLabel.Content = mp3.Artist + " - " + mp3.Title;
         }
     }
 }
