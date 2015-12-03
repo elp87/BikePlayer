@@ -9,6 +9,7 @@ namespace BikePlayer
     /// </summary>
     public partial class MainWindow
     {
+        Mp3File _mp3;
         public MainWindow()
         {
             InitializeComponent();
@@ -23,9 +24,14 @@ namespace BikePlayer
             };
             bool? result = ofDialog.ShowDialog();
             if (result == null || !result.Value) return;
-            Mp3File mp3 = new Mp3File(ofDialog.FileName);
-            mp3.Play();
-            ContentLabel.Content = mp3.Artist + " - " + mp3.Title;
+            _mp3 = new Mp3File(ofDialog.FileName);
+            _mp3.Play();
+            ContentLabel.Content = _mp3.Artist + " - " + _mp3.Title;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            _mp3.Stop();
         }
     }
 }
