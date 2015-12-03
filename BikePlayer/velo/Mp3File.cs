@@ -7,13 +7,11 @@ namespace elp87.VeloAudio
     {
         private readonly Mp3Tag _tag;
         private readonly string _filename;
-        private bool _isPaused;
         private IWavePlayer _waveOutDevice;
         private AudioFileReader _audioFileReader;
-        
+
         public Mp3File(string filename)
         {
-            _isPaused = false;
             if (filename == "") return;
             _filename = filename;
             _tag = new Mp3Tag(_filename);
@@ -31,22 +29,19 @@ namespace elp87.VeloAudio
 
         public void Pause()
         {
-            if (!_isPaused)
+            if (_waveOutDevice.PlaybackState == PlaybackState.Playing)
             {
                 _waveOutDevice.Pause();
-                _isPaused = true;
             }
             else
             {
                 _waveOutDevice.Play();
-                _isPaused = false;
             }
-
         }
 
         public void Stop()
         {
-            
+            _waveOutDevice.Stop();
         }
         #endregion
         #endregion
@@ -70,7 +65,7 @@ namespace elp87.VeloAudio
         public string Title
         {
             get { return _tag.Title; }
-        } 
+        }
         #endregion
     }
 }
