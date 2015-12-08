@@ -1,4 +1,5 @@
-﻿using elp87.TagReader;
+﻿using System;
+using elp87.TagReader;
 using NAudio.Wave;
 
 namespace elp87.VeloAudio
@@ -6,23 +7,22 @@ namespace elp87.VeloAudio
     public class Mp3File : IAudioFile
     {
         private readonly Mp3Tag _tag;
-        private readonly string _filename;
-        private IWavePlayer _waveOutDevice;
-        private AudioFileReader _audioFileReader;
+        private readonly IWavePlayer _waveOutDevice;
+        private readonly AudioFileReader _audioFileReader;
 
         public Mp3File(string filename)
         {
             if (filename == "") return;
-            _filename = filename;
-            _tag = new Mp3Tag(_filename);
+
+            _waveOutDevice = new WaveOut();
+            _audioFileReader = new AudioFileReader(filename);
+            _tag = new Mp3Tag(filename);
         }
 
         #region Methods
         #region Public
         public void Play()
         {
-            _waveOutDevice = new WaveOut();
-            _audioFileReader = new AudioFileReader(_filename);
             _waveOutDevice.Init(_audioFileReader);
             _waveOutDevice.Play();
         }
@@ -65,6 +65,20 @@ namespace elp87.VeloAudio
         public string Title
         {
             get { return _tag.Title; }
+        }
+
+        public TimeSpan Length
+        {
+            get { return _audioFileReader.TotalTime; }
+        }
+
+        public TimeSpan CurrentTime
+        {
+            get
+            {
+                if (_waveOutDevice.PlaybackState != PlaybackState.Playing ) return new TimeSpan(0);
+                return _audioFileReader.CurrentTime;
+            }
         }
         #endregion
     }

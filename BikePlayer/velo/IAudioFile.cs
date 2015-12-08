@@ -1,4 +1,6 @@
-﻿namespace elp87.VeloAudio
+﻿using System;
+
+namespace elp87.VeloAudio
 {
     public interface IAudioFile
     {
@@ -10,5 +12,8 @@
         string Album { get; }
         string Year { get; }
         string Title { get; }
+
+        TimeSpan Length { get; }
+        TimeSpan CurrentTime { get; }
     }
 }
