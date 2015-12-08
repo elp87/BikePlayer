@@ -17,6 +17,7 @@ namespace elp87.VeloAudio
             _waveOutDevice = new WaveOut();
             _audioFileReader = new AudioFileReader(filename);
             _tag = new Mp3Tag(filename);
+            _waveOutDevice.PlaybackStopped += _waveOutDevice_PlaybackStopped;
         }
 
         #region Methods
@@ -42,6 +43,17 @@ namespace elp87.VeloAudio
         public void Stop()
         {
             _waveOutDevice.Stop();
+        }
+        #endregion
+
+        #region EventHandlers
+        private void _waveOutDevice_PlaybackStopped(object sender, StoppedEventArgs e)
+        {
+            StopEventArgs.StopCases stopCase;
+            if (_audioFileReader.Position == _audioFileReader.Length) stopCase = StopEventArgs.StopCases.Finished;
+            else stopCase = StopEventArgs.StopCases.UserStoped;
+
+            if (Stopped != null) Stopped(this, new StopEventArgs { StopCase = stopCase });
         }
         #endregion
         #endregion
@@ -81,5 +93,7 @@ namespace elp87.VeloAudio
             }
         }
         #endregion
+
+        public event EventHandler<StopEventArgs> Stopped;
     }
 }
