@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Timers;
+using System.Windows;
 using elp87.VeloAudio;
 using Microsoft.Win32;
 
@@ -9,7 +11,7 @@ namespace BikePlayer
     /// </summary>
     public partial class MainWindow
     {
-        Mp3File _mp3;
+        private Mp3File _mp3;
         public MainWindow()
         {
             InitializeComponent();
@@ -27,6 +29,17 @@ namespace BikePlayer
             _mp3 = new Mp3File(ofDialog.FileName);
             _mp3.Play();
             ContentLabel.Content = _mp3.Artist + " - " + _mp3.Title;
+
+            Timer timer = new Timer(1000);
+            timer.Elapsed += timer_Elapsed;
+            timer.Enabled = true;
+
+            TimeSlider.Maximum = _mp3.Length.TotalSeconds;
+        }
+
+        private void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            TimeSlider.Dispatcher.Invoke(new Func<double>(() => TimeSlider.Value = _mp3.CurrentTime.TotalSeconds));
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
