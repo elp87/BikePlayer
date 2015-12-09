@@ -6,7 +6,7 @@
         <Button Content="Play" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,47,0,0" Click="Button_Click"/>
         <Button Content="Pause" HorizontalAlignment="Left" Margin="92,47,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
         <Label x:Name="ContentLabel" Content="" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Slider x:Name="TimeSlider" Margin="172,49,10,0" VerticalAlignment="Top"/>
+        <Slider x:Name="TimeSlider" Margin="172,49,10,0" VerticalAlignment="Top" PreviewMouseLeftButtonUp="TimeSlider_PreviewMouseLeftButtonUp"  />
 
 
     </Grid>

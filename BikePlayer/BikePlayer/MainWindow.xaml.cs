@@ -35,16 +35,31 @@ namespace BikePlayer
             timer.Enabled = true;
 
             TimeSlider.Maximum = _mp3.Length.TotalSeconds;
+            _mp3.Stopped += _mp3_Stopped;
+        }
+
+        private void _mp3_Stopped(object sender, StopEventArgs e)
+        {
+            if (e.StopCase == StopEventArgs.StopCases.Finished) MessageBox.Show("Finish");
+            else MessageBox.Show("Stopped");
         }
 
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            TimeSlider.Dispatcher.Invoke(new Func<double>(() => TimeSlider.Value = _mp3.CurrentTime.TotalSeconds));
+            Dispatcher.Invoke(new Action(() =>
+            {
+                TimeSlider.Value = _mp3.CurrentTime.TotalSeconds;
+            }));
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             _mp3.Stop();
+        }
+
+        private void TimeSlider_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            _mp3.CurrentTime = new TimeSpan(0, 0, (int)TimeSlider.Value);
         }
     }
 }
