@@ -14,7 +14,7 @@ namespace elp87.VeloAudio
         string Title { get; }
 
         TimeSpan Length { get; }
-        TimeSpan CurrentTime { get; }
+        TimeSpan CurrentTime { get; set; }
 
         event EventHandler<StopEventArgs> Stopped;
     }

@@ -91,6 +91,7 @@ namespace elp87.VeloAudio
                 if (_waveOutDevice.PlaybackState != PlaybackState.Playing ) return new TimeSpan(0);
                 return _audioFileReader.CurrentTime;
             }
+            set { _audioFileReader.CurrentTime = value; }
         }
         #endregion
 
