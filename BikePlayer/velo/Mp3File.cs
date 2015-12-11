@@ -13,10 +13,11 @@ namespace elp87.VeloAudio
         public Mp3File(string filename)
         {
             if (filename == "") return;
+            Filename = filename;
 
             _waveOutDevice = new WaveOut();
-            _audioFileReader = new AudioFileReader(filename);
-            _tag = new Mp3Tag(filename);
+            _audioFileReader = new AudioFileReader(Filename);
+            _tag = new Mp3Tag(Filename);
             _waveOutDevice.PlaybackStopped += _waveOutDevice_PlaybackStopped;
         }
 
@@ -65,6 +66,7 @@ namespace elp87.VeloAudio
         #endregion
 
         #region Properties
+        public string Filename { get; private set; }
         public string Artist
         {
             get { return _tag.Performer; }
