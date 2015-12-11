@@ -44,6 +44,12 @@ namespace elp87.VeloAudio
         {
             _waveOutDevice.Stop();
         }
+
+        public override string ToString()
+        {
+            return _tag.Performer + " - " + _tag.Title;
+        }
+
         #endregion
 
         #region EventHandlers
