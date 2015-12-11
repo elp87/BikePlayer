@@ -17,7 +17,7 @@ namespace BikePlayer
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofDialog = new OpenFileDialog
             {
@@ -26,6 +26,7 @@ namespace BikePlayer
             };
             bool? result = ofDialog.ShowDialog();
             if (result == null || !result.Value) return;
+            if (_mp3 != null) _mp3.Stop();
             _mp3 = new Mp3File(ofDialog.FileName);
             _mp3.Play();
             ContentLabel.Content = _mp3.Artist + " - " + _mp3.Title;
