@@ -26,23 +26,18 @@ namespace BikePlayer
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofDialog = new OpenFileDialog
-            {
-                DefaultExt = ".mp3",
-                Filter = "файл портфеля (*.mp3)|*.mp3"
-            };
-            bool? result = ofDialog.ShowDialog();
-            if (result == null || !result.Value) return;
             if (_mp3 != null) _mp3.Stop();
-            _mp3 = new Mp3File(ofDialog.FileName);
+            _mp3 = PlaylistListBox.SelectedItem as Mp3File;
+            if (_mp3 == null) return;
             _mp3.Play();
-            
+
             Timer timer = new Timer(1000);
             timer.Elapsed += timer_Elapsed;
             timer.Enabled = true;
 
             TimeSlider.Maximum = _mp3.Length.TotalSeconds;
             _mp3.Stopped += _mp3_Stopped;
+
         }
 
         private void _mp3_Stopped(object sender, StopEventArgs e)

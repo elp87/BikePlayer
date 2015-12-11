@@ -14,10 +14,7 @@ namespace elp87.VeloAudio
         {
             if (filename == "") return;
             Filename = filename;
-
-            
             _tag = new Mp3Tag(Filename);
-            
         }
 
         #region Methods
