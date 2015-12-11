@@ -29,8 +29,7 @@ namespace BikePlayer
             if (_mp3 != null) _mp3.Stop();
             _mp3 = new Mp3File(ofDialog.FileName);
             _mp3.Play();
-            ContentLabel.Content = _mp3.Artist + " - " + _mp3.Title;
-
+            
             Timer timer = new Timer(1000);
             timer.Elapsed += timer_Elapsed;
             timer.Enabled = true;
@@ -41,8 +40,7 @@ namespace BikePlayer
 
         private void _mp3_Stopped(object sender, StopEventArgs e)
         {
-            if (e.StopCase == StopEventArgs.StopCases.Finished) MessageBox.Show("Finish");
-            else MessageBox.Show("Stopped");
+            
         }
 
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -50,6 +48,8 @@ namespace BikePlayer
             Dispatcher.Invoke(new Action(() =>
             {
                 TimeSlider.Value = _mp3.CurrentTime.TotalSeconds;
+                string timeString = _mp3.CurrentTime.ToString(@"mm\:ss");
+                ContentLabel.Content = _mp3.Artist + " - " + _mp3.Title + " (" + timeString + ")";
             }));
         }
 
