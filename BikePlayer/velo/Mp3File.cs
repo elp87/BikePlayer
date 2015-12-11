@@ -7,24 +7,26 @@ namespace elp87.VeloAudio
     public class Mp3File : IAudioFile
     {
         private readonly Mp3Tag _tag;
-        private readonly IWavePlayer _waveOutDevice;
-        private readonly AudioFileReader _audioFileReader;
+        private IWavePlayer _waveOutDevice;
+        private AudioFileReader _audioFileReader;
 
         public Mp3File(string filename)
         {
             if (filename == "") return;
             Filename = filename;
 
-            _waveOutDevice = new WaveOut();
-            _audioFileReader = new AudioFileReader(Filename);
+            
             _tag = new Mp3Tag(Filename);
-            _waveOutDevice.PlaybackStopped += _waveOutDevice_PlaybackStopped;
+            
         }
 
         #region Methods
         #region Public
         public void Play()
         {
+            _waveOutDevice = new WaveOut();
+            _audioFileReader = new AudioFileReader(Filename);
+            _waveOutDevice.PlaybackStopped += _waveOutDevice_PlaybackStopped;
             _waveOutDevice.Init(_audioFileReader);
             _waveOutDevice.Play();
         }
