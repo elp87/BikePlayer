@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Timers;
 using System.Windows;
 using elp87.VeloAudio;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Timer = System.Timers.Timer;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 
@@ -37,12 +37,18 @@ namespace BikePlayer
 
             TimeSlider.Maximum = _mp3.Length.TotalSeconds;
             _mp3.Stopped += _mp3_Stopped;
-
         }
 
         private void _mp3_Stopped(object sender, StopEventArgs e)
         {
-            
+            if (e.StopCase != StopEventArgs.StopCases.Finished) return;
+            Mp3File nextFile = _mp3List.ElementAtOrDefault(_mp3List.IndexOf(_mp3) + 1);
+            if (nextFile != null)
+            {
+                _mp3 = nextFile;
+                PlaylistListBox.SelectedItem = _mp3;
+                _mp3.Play();
+            }
         }
 
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
