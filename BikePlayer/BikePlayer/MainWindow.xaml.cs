@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Timers;
 using System.Windows;
+using System.Windows.Input;
 using elp87.VeloAudio;
 using Timer = System.Timers.Timer;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
@@ -84,6 +85,11 @@ namespace BikePlayer
                 }
                 PlaylistListBox.ItemsSource = _mp3List;
             }
+        }
+
+        private void PlaylistListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            PlayButton_Click(sender, new RoutedEventArgs());
         }
     }
 }
