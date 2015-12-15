@@ -106,5 +106,10 @@ namespace BikePlayer
             _mp3.Stopped += _mp3_Stopped;
         } 
         #endregion
+
+        private void VolumeLevelSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (_mp3 != null) _mp3.SetVolumeLevel((float)VolumeLevelSlider.Value);
+        }
     }
 }
