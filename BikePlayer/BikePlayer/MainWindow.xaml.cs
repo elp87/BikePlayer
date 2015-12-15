@@ -16,15 +16,20 @@ namespace BikePlayer
     /// </summary>
     public partial class MainWindow
     {
+        #region Fields
         private Mp3File _mp3;
-        private readonly ObservableCollection<Mp3File> _mp3List;
+        private readonly ObservableCollection<Mp3File> _mp3List; 
+        #endregion
 
+        #region Constructor
         public MainWindow()
         {
             InitializeComponent();
             _mp3List = new ObservableCollection<Mp3File>();
-        }
+        } 
+        #endregion
 
+        #region Event handlers
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
             if (_mp3 != null) _mp3.Stop();
@@ -33,16 +38,34 @@ namespace BikePlayer
             PlayTrack();
         }
 
-        private void PlayTrack()
+        private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            _mp3.Play();
+            _mp3.Stop();
+        }
 
-            Timer timer = new Timer(1000);
-            timer.Elapsed += timer_Elapsed;
-            timer.Enabled = true;
+        private void OpenFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string[] filenames = Directory.GetFiles(folderDialog.SelectedPath, "*.mp3");
+                foreach (string filename in filenames)
+                {
+                    Mp3File newMp3 = new Mp3File(filename);
+                    _mp3List.Add(newMp3);
+                }
+                PlaylistListBox.ItemsSource = _mp3List;
+            }
+        }
 
-            TimeSlider.Maximum = _mp3.Length.TotalSeconds;
-            _mp3.Stopped += _mp3_Stopped;
+        private void PlaylistListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            PlayButton_Click(sender, new RoutedEventArgs());
+        }
+
+        private void TimeSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _mp3.CurrentTime = new TimeSpan(0, 0, (int)TimeSlider.Value);
         }
 
         private void _mp3_Stopped(object sender, StopEventArgs e)
@@ -66,37 +89,20 @@ namespace BikePlayer
                 ContentLabel.Content = _mp3.Artist + " - " + _mp3.Title + " (" + timeString + ")";
             }));
         }
+        #endregion
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        #region Methods
+        private void PlayTrack()
         {
-            _mp3.Stop();
-        }
+            _mp3.Play();
 
-        private void TimeSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            _mp3.CurrentTime = new TimeSpan(0, 0, (int)TimeSlider.Value);
-        }
+            Timer timer = new Timer(1000);
+            timer.Elapsed += timer_Elapsed;
+            timer.Enabled = true;
 
-        private void OpenFolderButton_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
-            if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string[] filenames = Directory.GetFiles(folderDialog.SelectedPath, "*.mp3");
-                foreach (string filename in filenames)
-                {
-                    Mp3File newMp3 = new Mp3File(filename);
-                    _mp3List.Add(newMp3);
-                }
-                PlaylistListBox.ItemsSource = _mp3List;
-            }
-        }
-
-        private void PlaylistListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            PlayButton_Click(sender, new RoutedEventArgs());
-        }
-
-        
+            TimeSlider.Maximum = _mp3.Length.TotalSeconds;
+            _mp3.Stopped += _mp3_Stopped;
+        } 
+        #endregion
     }
 }
