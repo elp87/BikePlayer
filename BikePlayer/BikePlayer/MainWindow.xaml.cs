@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using elp87.VeloAudio;
 using Timer = System.Timers.Timer;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
@@ -104,12 +107,32 @@ namespace BikePlayer
 
             TimeSlider.Maximum = _mp3.Length.TotalSeconds;
             _mp3.Stopped += _mp3_Stopped;
-        } 
+
+            CoverImage.Source = ImageFromBuffer(_mp3.CoverArt);
+        }
+
+        public BitmapImage ImageFromBuffer(Image image)
+        {
+            if (image == null) return new BitmapImage();
+            using (MemoryStream memory = new MemoryStream())
+            {
+                image.Save(memory, ImageFormat.Bmp);
+                memory.Position = 0;
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                return bitmapImage;
+            }
+        }
         #endregion
 
         private void VolumeLevelSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (_mp3 != null) _mp3.SetVolumeLevel((float)VolumeLevelSlider.Value);
         }
+
+        
     }
 }
