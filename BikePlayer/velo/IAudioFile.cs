@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace elp87.VeloAudio
 {
@@ -16,6 +17,8 @@ namespace elp87.VeloAudio
         string Album { get; }
         string Year { get; }
         string Title { get; }
+
+        Image CoverArt { get; }
 
         TimeSpan Length { get; }
         TimeSpan CurrentTime { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using elp87.TagReader;
 using NAudio.Wave;
 
@@ -90,6 +91,21 @@ namespace elp87.VeloAudio
         public string Title
         {
             get { return _tag.Title; }
+        }
+
+        public Image CoverArt
+        {
+            get
+            {
+                try
+                {
+                    return _tag.Id3v2.APIC[0].GetPicture();
+                }
+                catch (NullReferenceException)
+                {
+                    return null;
+                }
+            }
         }
 
         public TimeSpan Length
