@@ -50,6 +50,7 @@
     <Compile Include="Mp3File.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StopEventArgs.cs" />
+    <Compile Include="VolumeInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
