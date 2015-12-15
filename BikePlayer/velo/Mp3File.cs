@@ -43,6 +43,12 @@ namespace elp87.VeloAudio
         public void Stop()
         {
             _waveOutDevice.Stop();
+            _waveOutDevice.Dispose();
+        }
+
+        public void SetVolumeLevel(float volume)
+        {
+            _audioFileReader.Volume = volume;
         }
 
         public override string ToString()

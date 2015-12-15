@@ -8,6 +8,8 @@ namespace elp87.VeloAudio
         void Pause();
         void Stop();
 
+        void SetVolumeLevel(float volume);
+
         string Filename { get; }
 
         string Artist { get; }

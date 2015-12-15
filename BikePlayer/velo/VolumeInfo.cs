@@ -4,11 +4,11 @@
     {
         public VolumeInfo()
         {
-            Value = 50;
+            Value = 0.5f;
         }
 
-        public int MinValue { get { return 0; } }
-        public int MaxValue { get { return 100; } }
-        public int Value { get; set; }
+        public float MinValue { get { return 0; } }
+        public float MaxValue { get { return 1; } }
+        public float Value { get; set; }
     }
 }
