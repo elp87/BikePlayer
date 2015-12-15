@@ -18,7 +18,8 @@ namespace BikePlayer
     {
         #region Fields
         private Mp3File _mp3;
-        private readonly ObservableCollection<Mp3File> _mp3List; 
+        private readonly ObservableCollection<Mp3File> _mp3List;
+
         #endregion
 
         #region Constructor
@@ -26,6 +27,7 @@ namespace BikePlayer
         {
             InitializeComponent();
             _mp3List = new ObservableCollection<Mp3File>();
+            VolumeLevelSlider.DataContext = new VolumeInfo();
         } 
         #endregion
 
