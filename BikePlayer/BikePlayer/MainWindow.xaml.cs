@@ -22,6 +22,7 @@ namespace BikePlayer
         #region Fields
         private Mp3File _mp3;
         private readonly ObservableCollection<Mp3File> _mp3List;
+        private readonly VolumeInfo _volume;
 
         #endregion
 
@@ -30,7 +31,9 @@ namespace BikePlayer
         {
             InitializeComponent();
             _mp3List = new ObservableCollection<Mp3File>();
-            VolumeLevelSlider.DataContext = new VolumeInfo();
+
+            _volume = new VolumeInfo();
+            VolumeLevelSlider.DataContext = _volume;
         } 
         #endregion
 
@@ -100,6 +103,7 @@ namespace BikePlayer
         private void PlayTrack()
         {
             _mp3.Play();
+            _mp3.SetVolumeLevel(_volume.Value);
 
             Timer timer = new Timer(1000);
             timer.Elapsed += timer_Elapsed;
