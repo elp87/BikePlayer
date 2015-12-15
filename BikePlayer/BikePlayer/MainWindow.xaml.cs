@@ -30,6 +30,11 @@ namespace BikePlayer
             if (_mp3 != null) _mp3.Stop();
             _mp3 = PlaylistListBox.SelectedItem as Mp3File;
             if (_mp3 == null) return;
+            PlayTrack();
+        }
+
+        private void PlayTrack()
+        {
             _mp3.Play();
 
             Timer timer = new Timer(1000);
@@ -48,7 +53,7 @@ namespace BikePlayer
             {
                 _mp3 = nextFile;
                 PlaylistListBox.SelectedItem = _mp3;
-                _mp3.Play();
+                PlayTrack();
             }
         }
 
@@ -67,7 +72,7 @@ namespace BikePlayer
             _mp3.Stop();
         }
 
-        private void TimeSlider_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void TimeSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _mp3.CurrentTime = new TimeSpan(0, 0, (int)TimeSlider.Value);
         }
@@ -91,5 +96,7 @@ namespace BikePlayer
         {
             PlayButton_Click(sender, new RoutedEventArgs());
         }
+
+        
     }
 }
